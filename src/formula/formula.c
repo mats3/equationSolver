@@ -5,7 +5,7 @@ void replaceChild(node_t *head, node_t *replacedNode) {
 	head->child = replacedNode;
 }
 
-node_t *generateList(char *formula) {
+node_t *createEquation(char *formula) {
 	node_t dummy;
 	node_t *head = &dummy;
 	node_t *currentNode = NULL;
@@ -34,38 +34,29 @@ node_t *generateList(char *formula) {
 				break;
 			case HIGHER:
 				appendChild(currentHead, currentNode);
-				if (currentHead->parent == NULL) {
-					newHead = setHead(formula[i + 1]);
-					appendChild(newHead, head);
-					head = newHead;
-					currentHead = newHead;
-					break;
-				}
-				int test = 0;
-				while ((state = cmpOperation(currentHead->parent->type,
-											 formula[i + 1])) != HIGHER &&
-						state != EQUAL) {
-					currentHead = currentHead->parent;
+
+				while (1) {
 					if (currentHead->parent == NULL) {
-						test = 1;
+						newHead = setHead(formula[i + 1]);
+						appendChild(newHead, head);
+						head = newHead;
+						currentHead = newHead;
 						break;
 					}
-				}
-				if (test) {
-					newHead = setHead(formula[i + 1]);
-					appendChild(newHead, head);
-					head = newHead;
-					currentHead = newHead;
-					break;
-				}
-				if (state == EQUAL) {
+					state = cmpOperation(currentHead->parent->type, formula[i + 1]);
+					if (state == HIGHER) {
+						newHead = setHead(formula[i + 1]);
+						popNode(currentHead->parent);
+						appendChild(currentHead->parent, newHead);
+						appendChild(newHead, currentHead);
+						currentHead = newHead;
+						break;
+					}
+					if (state == EQUAL) {
+						currentHead = currentHead->parent;
+						break;
+					}
 					currentHead = currentHead->parent;
-				} else {
-					newHead = setHead(formula[i + 1]);
-					popNode(currentHead->parent);
-					appendChild(currentHead->parent, newHead);
-					appendChild(newHead, currentHead);
-					currentHead = newHead;
 				}
 				break;
 			case EQUAL:

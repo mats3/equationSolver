@@ -4,8 +4,8 @@
 #include"operation.h"
 #include"node.h"
 
-char *getFormatList(node_t *head);
+node_t *createEquation(char *formula);
 
-node_t *generateList(char *formula);
+node_t solveEquation(char sign);
 
 #endif

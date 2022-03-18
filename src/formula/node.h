@@ -27,6 +27,8 @@ node_t *appendChild(node_t *head, node_t *node);
 
 void popNode(node_t *head);
 
+char *getFormatList(node_t *head);
+
 void printList(node_t *head);
 
 #endif
